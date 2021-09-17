@@ -3,3 +3,4 @@ sample_submission.csv
 test.csv
 train.csv
 .gitignore
+__pycache__/
