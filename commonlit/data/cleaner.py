@@ -8,37 +8,41 @@ nlp = spacy.load("en_core_web_sm")
 # from data_loader import load_to_df
 
 class Cleaner:
-    def __init__(self, file_name, path):
-        self.filename = file_name
+    def __init__(self, filename, path):
+        self.filename = filename
         self.path = path
     
 
-    # def load_to_df(self):
-    #     # print('Calling function load_to_df')
-    #     # opening the zip file in READ mode
-    #     with ZipFile(self.filename, 'r') as zip:
-    #         # printing all the contents of the zip file
-    #         zip.printdir()
+    def unzip_folder(self):
+        # opening the zip file in READ mode
+        with ZipFile(self.filename, 'r') as zip:
+            # printing all the contents of the zip file
+            zip.printdir()
 
-    #         # extracting all the files
-    #         print('Extracting all the files now...')
-    #         zip.extractall(path)
-    #         print('Done!')
+            # extracting all the files
+            print('Extracting all the files now...')
+            zip.extractall(self.path)
+            print('Done!')
+
+    def load_to_df(self):
+        data_path = os.path.join(self.path,'train.csv')
+        data = pd.read_csv(data_path, usecols=['id','excerpt','target','standard_error'],  index_col = 'id')
+        return data
+
+    
 
     def clean_data(self):
-        print('cleaned_data called...')
-        # self.load_to_df()
+        self.unzip_folder()
+        df = self.load_to_df()
+        print(df.head())
 
-    # data_path = os.path.join(path,'train.csv')
-    # data = pd.read_csv(data_path, usecols=['id','excerpt','target','standard_error'],  index_col = 'id')
-    # return data
+    
 
     
     
 
-if __name__=='main':
+if __name__=='__main__':
     path =  os.path.join(os.getcwd(), "data")
     # specifying the zip file name
-    file_name = os.path.join(path,"commonlitreadabilityprize.zip")
-
-    cleaned = Cleaner(file_name, path).clean_data()
+    filename = os.path.join(path,"commonlitreadabilityprize.zip")
+    cleaned = Cleaner(filename, path).clean_data()
